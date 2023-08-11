@@ -4,6 +4,7 @@ from django.db import models
 class Product(models.Model):
     name = models.CharField(max_length=300)
     link = models.URLField(max_length=600)
+    package = models.IntegerField()
 
     class Meta:
         verbose_name = "Product"

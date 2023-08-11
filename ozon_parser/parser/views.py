@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User, Group
+from django.http import JsonResponse
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.decorators import api_view
@@ -14,7 +15,6 @@ from .serializers import (
 )
 from .tasks import create_product
 from .models import Product
-from telegram_bot.views import run_bot
 
 num_of_products = openapi.Parameter(
     "num_of_products",
@@ -56,9 +56,14 @@ class GroupViewSet(viewsets.ModelViewSet):
 @api_view(["GET", "POST"])
 def parser(request):
     if request.method == "POST":
-        num_of_products = request.data["num_of_products"]
-        create_product(num_of_products=num_of_products)
-        return Response(num_of_products)
+        num_of_products = int(request.data["num_of_products"])
+        try:
+            chat_id = request.data["chat_id"]
+        except:
+            chat_id = None
+        task = create_product.delay(num_of_products, chat_id)
+        return JsonResponse({"task_id": task.id}, status=202)
+
     elif request.method == "GET":
         queryset = Product.objects.all()
         serializer = ProductSerializer(queryset, many=True)
