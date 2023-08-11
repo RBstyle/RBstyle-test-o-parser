@@ -38,9 +38,6 @@ def get_products(num_of_products: int = 10):
         if i.a["href"]:
             next_page = domain + i.a["href"]
             break
-    print("!!!!!!!!!!!!!!!!!!!!")
-    print(type(num_of_products))
-    print(num_of_products)
     # if num_of_products > 36 and next_page:
     #     driver = webdriver.Chrome(options=options, service=driver_service)
     #     driver.get(next_page)

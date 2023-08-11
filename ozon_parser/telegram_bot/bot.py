@@ -120,7 +120,6 @@ async def success_message(chat_id, num_of_products: int):
         chat_id=chat_id,
         text=f"Задача на парсинг товаров с сайта Ozon завершена.\nСохранено: {num_of_products} товаров.",
     )
-    # await ParserStates.common.set()
     await bot.send_message(
         chat_id=chat_id,
         text="/start - начало работы с ботом\n\
@@ -132,19 +131,9 @@ async def success_message(chat_id, num_of_products: int):
 
 def run_bot():
     try:
-        runniig_loop = asyncio.get_event_loop()
-        # runniig_loop.close()
-        print("!@@@@@@@@@@@@@@@!!!!!", asyncio.all_tasks(runniig_loop))
-    except:
-        pass
-    try:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         executor.start_polling(dp, skip_updates=True)
 
     except Exception as e:
         print("Error!", e)
-
-
-if __name__ == "__main__":
-    run_bot()
