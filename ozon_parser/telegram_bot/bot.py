@@ -56,12 +56,14 @@ async def product_list(message: types.Message, state: FSMContext):
     n = 1
     text = str()
     products = await get_product_list_from_last_package()
-
     for product in products:
         text += f"\n<b>{n}.</b> {product.name}\nСсылка на продукт: {product.link}"
         n += 1
-
-    await message.answer(text)
+        if len(text) >= 3000:
+            await message.answer(text)
+            text = str()
+    if text:
+        await message.answer(text)
     await start(message=message, state=state)
 
 
@@ -73,7 +75,10 @@ async def get_product_id(message: types.Message):
 
 @dp.message_handler(state=ParserStates.id)
 async def get_product(message: types.Message, state: FSMContext):
-    product = await get_product_by_id(int(message.text))
+    try:
+        product = await get_product_by_id(int(message.text))
+    except:
+        product = None
     if product == None:
         await message.answer(f"Такого товара не существует")
         await get_product_id(message=message)
@@ -94,13 +99,12 @@ async def parsing_products(message: types.Message, state: FSMContext):
             status = None
 
         if status == "PENDING":
-            print("!!!!!", status)
             await message.answer("Дождитесь завершения парсинга")
             return
 
     try:
         int(message.text)
-    except ValueError:
+    except:
         await message.answer("Введите количество продуктов(от 0 до 50)")
 
     if int(message.text) in range(0, 50 + 1):
@@ -113,6 +117,8 @@ async def parsing_products(message: types.Message, state: FSMContext):
             data["task_id"] = response.json()["task_id"]
 
         await message.answer(f"Парсинг...\nПродуктов: {message.text}")
+    else:
+        await message.answer("Введите количество продуктов(от 0 до 50)")
 
 
 async def success_message(chat_id, num_of_products: int):

@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/bash
 
 source ../venv/bin/activate
 gnome-terminal -- sh -c 'celery -A ozon_parser worker'

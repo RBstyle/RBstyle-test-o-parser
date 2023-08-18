@@ -38,19 +38,19 @@ def get_products(num_of_products: int = 10):
         if i.a["href"]:
             next_page = domain + i.a["href"]
             break
-    # if num_of_products > 36 and next_page:
-    #     driver = webdriver.Chrome(options=options, service=driver_service)
-    #     driver.get(next_page)
-    #     sleep(5)
+    if num_of_products > 36 and next_page:
+        driver = webdriver.Chrome(options=options, service=driver_service)
+        driver.get(next_page)
+        sleep(5)
 
-    #     html = driver.page_source
-    #     bs = BeautifulSoup(html, "html.parser")
-    #     search_result = bs.find(
-    #         "div", attrs={"class": "widget-search-result-container"}
-    #     )
-    #     res = BeautifulSoup(str(search_result), "html.parser")
-    #     another_products = res.find_all("a")
-    #     products = products + another_products
+        html = driver.page_source
+        bs = BeautifulSoup(html, "html.parser")
+        search_result = bs.find(
+            "div", attrs={"class": "widget-search-result-container"}
+        )
+        res = BeautifulSoup(str(search_result), "html.parser")
+        another_products = res.find_all("a")
+        products = products + another_products
     driver.close()
     driver.quit()
     return products
